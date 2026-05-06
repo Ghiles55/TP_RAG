@@ -38,12 +38,21 @@ EMBEDDING_MODEL=BAAI/bge-m3 python indexation.py
 python indexation.py
 ```
 
-2. **Lancer le RAG en mode interactif** :
+2. **Lancer le RAG**
+
+Deux interfaces possibles, au choix :
+
+**Option A — Mode terminal** (CLI) :
 ```bash
 python rag.py
 ```
-
 Tape ta question puis Entree. Tape `quit` pour sortir.
+
+**Option B — Mode web** (Streamlit, plus convivial) :
+```bash
+streamlit run app.py
+```
+Une page s'ouvre dans ton navigateur (par defaut sur `http://localhost:8501`). Tu tapes ta question dans la zone de texte, tu cliques sur **Demander**, et la reponse + les sources s'affichent. La sidebar resume l'etat du systeme (nb d'articles indexes, device, modeles utilises).
 
 ## Structure du projet
 
@@ -51,7 +60,8 @@ Tape ta question puis Entree. Tape `quit` pour sortir.
 - `corpus/code_travail.json` : ancien corpus manuel (26 articles), gardé en backup
 - `indexation.py` : parse le LEGI (filtre Partie législative + VIGUEUR -> ~4400 articles), calcule les embeddings, persiste dans chromadb
 - `context.txt` : template du prompt systeme avec placeholder `{{Chuncks}}`
-- `rag.py` : lit l'index, recherche les 10 articles les plus proches d'une question, demande au LLM de repondre avec les articles comme contexte
+- `rag.py` : lit l'index, recherche les 10 articles les plus proches d'une question, demande au LLM de repondre avec les articles comme contexte (interface CLI)
+- `app.py` : interface web Streamlit qui reutilise les fonctions de `rag.py`. Donne une UX plus agreable (text area, bouton, sources dans un expander)
 - `code_travail_db_<modele>/` : la base vectorielle persistee (ignoree par git). Le nom du modele d'embedding est inclus dans le nom du dossier (ex: `code_travail_db_paraphrase-multilingual-mpnet-base-v2/`) pour que la base soit auto-documentee et qu'on puisse avoir plusieurs bases en parallele si on compare des modeles.
 
 ## Choix techniques
