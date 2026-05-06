@@ -1,0 +1,158 @@
+[
+  {
+    "article": "L3121-1",
+    "titre": "Definition du temps de travail effectif",
+    "section": "Duree du travail",
+    "texte": "La duree du travail effectif est le temps pendant lequel le salarie est a la disposition de l'employeur et se conforme a ses directives sans pouvoir vaquer librement a des occupations personnelles."
+  },
+  {
+    "article": "L3121-27",
+    "titre": "Duree legale hebdomadaire du travail",
+    "section": "Duree du travail",
+    "texte": "La duree legale de travail effectif des salaries a temps complet est fixee a 35 heures par semaine. Cette duree est la reference pour le calcul des heures supplementaires."
+  },
+  {
+    "article": "L3121-18",
+    "titre": "Duree quotidienne maximale du travail",
+    "section": "Duree du travail",
+    "texte": "La duree quotidienne de travail effectif par salarie ne peut exceder 10 heures, sauf derogation accordee par l'inspecteur du travail dans des conditions determinees par decret. Une convention ou un accord d'entreprise peut prevoir le depassement de cette duree, dans la limite de 12 heures, en cas d'activite accrue ou pour des motifs lies a l'organisation de l'entreprise."
+  },
+  {
+    "article": "L3121-20",
+    "titre": "Duree hebdomadaire maximale du travail",
+    "section": "Duree du travail",
+    "texte": "Au cours d'une meme semaine, la duree maximale hebdomadaire de travail est de 48 heures. En cas de circonstances exceptionnelles, certaines entreprises peuvent etre autorisees a depasser pendant une periode limitee le plafond de 48 heures, sans que ce depassement puisse avoir pour effet de porter la duree du travail a plus de 60 heures par semaine."
+  },
+  {
+    "article": "L3121-22",
+    "titre": "Heures supplementaires et majoration",
+    "section": "Duree du travail",
+    "texte": "Les heures supplementaires accomplies au-dela de la duree legale hebdomadaire de 35 heures donnent lieu a une majoration de salaire de 25% pour chacune des huit premieres heures supplementaires. Les heures suivantes donnent lieu a une majoration de 50%."
+  },
+  {
+    "article": "L3121-30",
+    "titre": "Contingent annuel d'heures supplementaires",
+    "section": "Duree du travail",
+    "texte": "Des heures supplementaires peuvent etre accomplies dans la limite d'un contingent annuel defini par convention ou accord collectif d'entreprise ou, a defaut, par convention ou accord de branche. A defaut d'accord, le contingent annuel d'heures supplementaires est de 220 heures par salarie."
+  },
+  {
+    "article": "L3141-3",
+    "titre": "Droit aux conges payes",
+    "section": "Conges payes",
+    "texte": "Le salarie a droit a un conge de deux jours et demi ouvrables par mois de travail effectif chez le meme employeur. La duree totale du conge exigible ne peut exceder 30 jours ouvrables, soit 5 semaines par an."
+  },
+  {
+    "article": "L3141-4",
+    "titre": "Periodes assimilees a du travail effectif",
+    "section": "Conges payes",
+    "texte": "Sont assimilees a un mois de travail effectif pour la determination de la duree du conge les periodes equivalentes a quatre semaines ou vingt-quatre jours de travail. Le conge peut s'etendre sur douze mois consecutifs."
+  },
+  {
+    "article": "L3141-12",
+    "titre": "Periode de prise des conges payes",
+    "section": "Conges payes",
+    "texte": "Les conges peuvent etre pris des l'ouverture des droits, sans prejudice des regles de determination de la periode de prise des conges et de l'ordre des departs et des regles de fractionnement du conge fixees par les articles applicables."
+  },
+  {
+    "article": "L3141-19",
+    "titre": "Fractionnement des conges payes",
+    "section": "Conges payes",
+    "texte": "Lorsque le conge ne depasse pas douze jours ouvrables, il doit etre continu. Lorsque le conge principal est d'une duree superieure a douze jours ouvrables et au plus egale a vingt-quatre jours ouvrables, il peut etre fractionne par l'employeur avec l'accord du salarie. Une des fractions doit etre au minimum de douze jours ouvrables continus compris entre deux jours de repos hebdomadaire."
+  },
+  {
+    "article": "L1221-1",
+    "titre": "Forme du contrat de travail",
+    "section": "Contrat de travail",
+    "texte": "Le contrat de travail est soumis aux regles du droit commun. Il peut etre etabli selon les formes que les parties contractantes decident d'adopter."
+  },
+  {
+    "article": "L1221-19",
+    "titre": "Periode d'essai",
+    "section": "Contrat de travail",
+    "texte": "Le contrat de travail a duree indeterminee peut comporter une periode d'essai dont la duree maximale est de deux mois pour les ouvriers et les employes, trois mois pour les agents de maitrise et les techniciens, et quatre mois pour les cadres. La periode d'essai peut etre renouvelee une fois si un accord de branche etendu le prevoit."
+  },
+  {
+    "article": "L1221-25",
+    "titre": "Rupture pendant la periode d'essai",
+    "section": "Contrat de travail",
+    "texte": "Lorsqu'il est mis fin par l'employeur au contrat en cours ou au terme de la periode d'essai, le salarie est prevenu dans un delai qui ne peut etre inferieur a 24 heures en deca de huit jours de presence, 48 heures entre huit jours et un mois de presence, deux semaines apres un mois de presence, et un mois apres trois mois de presence."
+  },
+  {
+    "article": "L1242-1",
+    "titre": "Recours au CDD",
+    "section": "Contrat de travail",
+    "texte": "Un contrat de travail a duree determinee, quel que soit son motif, ne peut avoir ni pour objet ni pour effet de pourvoir durablement un emploi lie a l'activite normale et permanente de l'entreprise."
+  },
+  {
+    "article": "L1242-2",
+    "titre": "Cas de recours au CDD",
+    "section": "Contrat de travail",
+    "texte": "Un CDD ne peut etre conclu que pour l'execution d'une tache precise et temporaire, et seulement dans les cas suivants: remplacement d'un salarie absent, accroissement temporaire de l'activite de l'entreprise, emplois a caractere saisonnier, ou contrats d'usage dans certains secteurs definis par decret."
+  },
+  {
+    "article": "L1232-2",
+    "titre": "Entretien prealable au licenciement",
+    "section": "Licenciement",
+    "texte": "L'employeur qui envisage de licencier un salarie le convoque, avant toute decision, a un entretien prealable. La convocation est effectuee par lettre recommandee ou par lettre remise en main propre contre decharge. Cette lettre indique l'objet de la convocation et precise la date, l'heure et le lieu de l'entretien."
+  },
+  {
+    "article": "L1232-6",
+    "titre": "Notification du licenciement",
+    "section": "Licenciement",
+    "texte": "Lorsque l'employeur decide de licencier un salarie, il lui notifie sa decision par lettre recommandee avec avis de reception. Cette lettre comporte l'enonce du ou des motifs invoques par l'employeur. Le delai entre l'entretien prealable et la notification du licenciement ne peut etre inferieur a deux jours ouvrables."
+  },
+  {
+    "article": "L1234-1",
+    "titre": "Preavis de licenciement",
+    "section": "Licenciement",
+    "texte": "Lorsque le licenciement n'est pas motive par une faute grave, le salarie a droit a un preavis dont la duree est de un mois si le salarie justifie d'une anciennete de services continus comprise entre six mois et moins de deux ans, et de deux mois lorsque l'anciennete est d'au moins deux ans."
+  },
+  {
+    "article": "L1234-9",
+    "titre": "Indemnite de licenciement",
+    "section": "Licenciement",
+    "texte": "Le salarie titulaire d'un contrat de travail a duree indeterminee, licencie alors qu'il compte huit mois d'anciennete ininterrompus au service du meme employeur, a droit, sauf en cas de faute grave, a une indemnite de licenciement. Le taux et les modalites de calcul de cette indemnite sont fixes par voie reglementaire."
+  },
+  {
+    "article": "L1233-3",
+    "titre": "Definition du licenciement economique",
+    "section": "Licenciement",
+    "texte": "Constitue un licenciement pour motif economique le licenciement effectue par un employeur pour un ou plusieurs motifs non inherents a la personne du salarie, resultant d'une suppression ou transformation d'emploi ou d'une modification refusee par le salarie d'un element essentiel du contrat de travail, consecutives notamment a des difficultes economiques, des mutations technologiques, une reorganisation necessaire a la sauvegarde de la competitivite, ou la cessation d'activite de l'entreprise."
+  },
+  {
+    "article": "L1237-11",
+    "titre": "Principe de la rupture conventionnelle",
+    "section": "Rupture conventionnelle",
+    "texte": "L'employeur et le salarie peuvent convenir en commun des conditions de la rupture du contrat de travail qui les lie. La rupture conventionnelle, exclusive du licenciement ou de la demission, ne peut etre imposee par l'une ou l'autre des parties. Elle resulte d'une convention signee par les parties au contrat."
+  },
+  {
+    "article": "L1237-13",
+    "titre": "Indemnite specifique de rupture conventionnelle",
+    "section": "Rupture conventionnelle",
+    "texte": "La convention de rupture definit les conditions de celle-ci, notamment le montant de l'indemnite specifique de rupture conventionnelle qui ne peut pas etre inferieure a celui de l'indemnite legale de licenciement. A compter de la signature, chacune des parties dispose d'un delai de retractation de quinze jours calendaires."
+  },
+  {
+    "article": "L1237-14",
+    "titre": "Homologation de la rupture conventionnelle",
+    "section": "Rupture conventionnelle",
+    "texte": "A l'issue du delai de retractation, la partie la plus diligente adresse une demande d'homologation a l'autorite administrative competente. L'autorite administrative dispose d'un delai d'instruction de quinze jours ouvrables pour s'assurer du respect des conditions et de la liberte de consentement des parties. A defaut de notification dans ce delai, l'homologation est reputee acquise."
+  },
+  {
+    "article": "L3231-2",
+    "titre": "Salaire minimum interprofessionnel de croissance (SMIC)",
+    "section": "Salaire minimum",
+    "texte": "Le salaire minimum interprofessionnel de croissance assure aux salaries dont les salaires sont les plus faibles la garantie de leur pouvoir d'achat et une participation au developpement economique de la nation. La revalorisation du SMIC s'effectue chaque annee au 1er janvier."
+  },
+  {
+    "article": "L1152-1",
+    "titre": "Interdiction du harcelement moral",
+    "section": "Harcelement",
+    "texte": "Aucun salarie ne doit subir les agissements repetes de harcelement moral qui ont pour objet ou pour effet une degradation de ses conditions de travail susceptible de porter atteinte a ses droits et a sa dignite, d'alterer sa sante physique ou mentale ou de compromettre son avenir professionnel."
+  },
+  {
+    "article": "L1153-1",
+    "titre": "Interdiction du harcelement sexuel",
+    "section": "Harcelement",
+    "texte": "Aucun salarie ne doit subir des faits de harcelement sexuel, constitues par des propos ou comportements a connotation sexuelle ou sexiste repetes qui portent atteinte a sa dignite en raison de leur caractere degradant ou humiliant, ou creent a son encontre une situation intimidante, hostile ou offensante."
+  }
+]

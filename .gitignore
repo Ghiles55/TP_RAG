@@ -1,0 +1,8 @@
+.env
+code_travail_db/
+code_travail_db_smoketest/
+__pycache__/
+*.pyc
+.DS_Store
+venv/
+.venv/
