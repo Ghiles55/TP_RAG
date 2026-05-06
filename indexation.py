@@ -1,7 +1,31 @@
 from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
 import chromadb
 import json
 import torch
+import os
+
+
+# On charge .env tout en haut pour que les variables soient disponibles.
+load_dotenv()
+
+
+# Nom du modele d'embedding : lu depuis .env (variable EMBEDDING_MODEL),
+# avec une valeur par defaut au cas ou .env ne le definit pas.
+# On l'expose en constante de module pour que rag.py puisse l'importer
+# (et utiliser le meme nom partout, notamment dans get_db_path).
+EMBEDDING_MODEL_NAME = os.environ.get("EMBEDDING_MODEL", "paraphrase-multilingual-mpnet-base-v2")
+
+
+def get_db_path(model_name=EMBEDDING_MODEL_NAME):
+	# On integre le nom du modele dans le chemin de la base vectorielle pour que :
+	# 1. quelqu'un qui consulte la base sache quel modele a genere les embeddings
+	# 2. on evite de melanger des vecteurs de modeles differents (dimensions
+	#    differentes -> chromadb planterait au query)
+	# 3. on puisse facilement avoir plusieurs bases en parallele pour comparer
+	#    plusieurs modeles d'embedding sans tout reindexer
+	safe = model_name.replace("/", "_")  # certains noms HF contiennent un slash
+	return f"./code_travail_db_{safe}"
 
 
 def get_best_device():
@@ -19,18 +43,12 @@ def load_legi_json(json_path):
 
 
 def parse_articles(node, section_path, articles_out, partie_filter):
-	# Parcours recursif de l'arbre LEGI pour extraire les articles.
-	# - section_path : liste des titres de sections traverses (du racine jusqu'ici)
-	# - partie_filter : on ne garde que les articles dont le 1er niveau correspond
-	#   (ex: "Partie législative") pour eviter d'avoir les articles abroges/anciens.
 	type_node = node.get("type")
 	data = node.get("data", {}) or {}
 
 	if type_node == "section":
 		titre = (data.get("title", "") or "").strip()
-		# Le JSON LEGI met parfois des \r\n en fin de titre, on normalise les espaces
 		titre = " ".join(titre.split())
-		# On verifie qu'on est bien dans la partie souhaitee (test fait au 1er niveau)
 		if len(section_path) == 0 and partie_filter and partie_filter.lower() not in titre.lower():
 			return  # on coupe la branche, ce n'est pas la partie qu'on veut
 		new_path = section_path + [titre]
@@ -109,7 +127,8 @@ if __name__ == "__main__":
 	# a distiluse pour du francais technique/juridique. Dim 768 (vs 512 pour distiluse).
 	device = get_best_device()
 	print(f"Device utilise pour l'embedding : {device}")
-	sentence_transformer_object = SentenceTransformer("paraphrase-multilingual-mpnet-base-v2", device=device)
+	print(f"Modele d'embedding : {EMBEDDING_MODEL_NAME}")
+	sentence_transformer_object = SentenceTransformer(EMBEDDING_MODEL_NAME, device=device)
 
 	# 2. Chargement du corpus LEGI (Code du travail complet)
 	# On garde uniquement la "Partie législative" (les fameux articles L...)
@@ -126,8 +145,12 @@ if __name__ == "__main__":
 	# 4. Calcul des embeddings (un vecteur par chunk)
 	embeddings = get_embeddings(sentence_transformer_object, chuncks)
 
-	# 5. Creation/ouverture de la base vectorielle persistante
-	chroma = chromadb.PersistentClient(path="./code_travail_db")
+	# 5. Creation/ouverture de la base vectorielle persistante.
+	# Le nom du dossier inclut le nom du modele d'embedding (cf. get_db_path),
+	# ce qui rend la base auto-documentee et evite les melanges entre modeles.
+	db_path = get_db_path()
+	print(f"Base vectorielle : {db_path}")
+	chroma = chromadb.PersistentClient(path=db_path)
 	collection = chroma.get_or_create_collection("code_du_travail")
 
 	# 6. Ajout des chunks dans la collection

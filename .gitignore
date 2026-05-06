@@ -1,6 +1,5 @@
 .env
-code_travail_db/
-code_travail_db_smoketest/
+code_travail_db*/
 __pycache__/
 *.pyc
 .DS_Store

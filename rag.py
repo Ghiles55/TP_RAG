@@ -3,12 +3,17 @@ from dotenv import load_dotenv
 import os
 
 import chromadb
-from indexation import retrieve, get_best_device
+from indexation import retrieve, get_best_device, EMBEDDING_MODEL_NAME, get_db_path
 
 from sentence_transformers import SentenceTransformer
 
 
 load_dotenv()
+
+
+# Modele LLM Groq utilise pour la generation, lu depuis .env (variable GROQ_MODEL),
+# avec une valeur par defaut.
+GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
 
 
 def read_file(file_path):
@@ -17,21 +22,12 @@ def read_file(file_path):
 
 
 def build_context(question, sentence_transformer_object, collection):
-	# On lit le template du prompt systeme
 	context = read_file(file_path="context.txt")
-
-	# On recupere les 10 articles les plus pertinents pour la question.
-	# n=10 permet de couvrir les questions multi-aspects (preavis + indemnite + procedure...)
-	# meme quand un cluster d'articles satures les premiers resultats (ex: L1233-x sur le
-	# licenciement economique ecrasent souvent les L1234-x sur les consequences).
 	docs, metas = retrieve(question, sentence_transformer_object, collection, n=10)
 
-	# On formate les chunks de maniere lisible pour le LLM
 	chuncks_formates = ""
 	for i, (doc, meta) in enumerate(zip(docs[0], metas[0]), start=1):
 		chuncks_formates += f"\n[Chunk {i}] (Article {meta['article']} - section {meta['section']})\n{doc}\n"
-
-	# On remplace le placeholder dans le template
 	full_context = context.replace("{{Chuncks}}", chuncks_formates)
 	return full_context, metas[0]
 
@@ -52,10 +48,10 @@ def answer_question(question, sentence_transformer_object, collection):
 				"content": question,
 			}
 		],
-		# openai/gpt-oss-120b : meilleur modele de reasoning sur le free tier Groq (mai 2026).
-		# 120B parametres, optimise pour suivre des consignes complexes et faire de la synthese
-		# multi-sources. Free tier : 30 RPM, 60K TPM, 14400 req/jour.
-		model="openai/gpt-oss-120b"
+
+		# Le modele est lu depuis .env (variable GROQ_MODEL).
+		# Defaut : openai/gpt-oss-120b (meilleur modele de reasoning free tier Groq).
+		model=GROQ_MODEL
 	)
 
 	reponse = chat_completion.choices[0].message.content
@@ -67,8 +63,16 @@ def main():
 
 	device = get_best_device()
 	print(f"Device utilise pour l'embedding : {device}")
-	sentence_transformer_object = SentenceTransformer("paraphrase-multilingual-mpnet-base-v2", device=device)
-	chroma = chromadb.PersistentClient(path="./code_travail_db")
+	print(f"Modele d'embedding         : {EMBEDDING_MODEL_NAME}")
+	print(f"Modele LLM Groq (inference) : {GROQ_MODEL}")
+	sentence_transformer_object = SentenceTransformer(EMBEDDING_MODEL_NAME, device=device)
+
+	# On recupere le meme chemin de base que celui utilise par indexation.py.
+	# Comme le nom du modele est dans le path, on est sur de ne pas requeter
+	# une base qui aurait ete generee avec un autre modele.
+	db_path = get_db_path()
+	print(f"Base vectorielle : {db_path}")
+	chroma = chromadb.PersistentClient(path=db_path)
 	collection = chroma.get_or_create_collection("code_du_travail")
 
 	print(f"Base prete : {collection.count()} articles indexes.")
