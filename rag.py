@@ -20,8 +20,11 @@ def build_context(question, sentence_transformer_object, collection):
 	# On lit le template du prompt systeme
 	context = read_file(file_path="context.txt")
 
-	# On recupere les 3 articles les plus pertinents pour la question
-	docs, metas = retrieve(question, sentence_transformer_object, collection, n=3)
+	# On recupere les 10 articles les plus pertinents pour la question.
+	# n=10 permet de couvrir les questions multi-aspects (preavis + indemnite + procedure...)
+	# meme quand un cluster d'articles satures les premiers resultats (ex: L1233-x sur le
+	# licenciement economique ecrasent souvent les L1234-x sur les consequences).
+	docs, metas = retrieve(question, sentence_transformer_object, collection, n=10)
 
 	# On formate les chunks de maniere lisible pour le LLM
 	chuncks_formates = ""
@@ -49,7 +52,10 @@ def answer_question(question, sentence_transformer_object, collection):
 				"content": question,
 			}
 		],
-		model="llama-3.3-70b-versatile"
+		# openai/gpt-oss-120b : meilleur modele de reasoning sur le free tier Groq (mai 2026).
+		# 120B parametres, optimise pour suivre des consignes complexes et faire de la synthese
+		# multi-sources. Free tier : 30 RPM, 60K TPM, 14400 req/jour.
+		model="openai/gpt-oss-120b"
 	)
 
 	reponse = chat_completion.choices[0].message.content
@@ -61,7 +67,7 @@ def main():
 
 	device = get_best_device()
 	print(f"Device utilise pour l'embedding : {device}")
-	sentence_transformer_object = SentenceTransformer("distiluse-base-multilingual-cased-v2", device=device)
+	sentence_transformer_object = SentenceTransformer("paraphrase-multilingual-mpnet-base-v2", device=device)
 	chroma = chromadb.PersistentClient(path="./code_travail_db")
 	collection = chroma.get_or_create_collection("code_du_travail")
 
