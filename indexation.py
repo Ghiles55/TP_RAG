@@ -6,24 +6,14 @@ import torch
 import os
 
 
-# On charge .env tout en haut pour que les variables soient disponibles.
 load_dotenv()
 
 
-# Nom du modele d'embedding : lu depuis .env (variable EMBEDDING_MODEL),
-# avec une valeur par defaut au cas ou .env ne le definit pas.
-# On l'expose en constante de module pour que rag.py puisse l'importer
-# (et utiliser le meme nom partout, notamment dans get_db_path).
+
 EMBEDDING_MODEL_NAME = os.environ.get("EMBEDDING_MODEL", "paraphrase-multilingual-mpnet-base-v2")
 
 
 def get_db_path(model_name=EMBEDDING_MODEL_NAME):
-	# On integre le nom du modele dans le chemin de la base vectorielle pour que :
-	# 1. quelqu'un qui consulte la base sache quel modele a genere les embeddings
-	# 2. on evite de melanger des vecteurs de modeles differents (dimensions
-	#    differentes -> chromadb planterait au query)
-	# 3. on puisse facilement avoir plusieurs bases en parallele pour comparer
-	#    plusieurs modeles d'embedding sans tout reindexer
 	safe = model_name.replace("/", "_")  # certains noms HF contiennent un slash
 	return f"./code_travail_db_{safe}"
 
@@ -50,13 +40,12 @@ def parse_articles(node, section_path, articles_out, partie_filter):
 		titre = (data.get("title", "") or "").strip()
 		titre = " ".join(titre.split())
 		if len(section_path) == 0 and partie_filter and partie_filter.lower() not in titre.lower():
-			return  # on coupe la branche, ce n'est pas la partie qu'on veut
+			return
 		new_path = section_path + [titre]
 		for child in node.get("children", []):
 			parse_articles(child, new_path, articles_out, partie_filter)
 
 	elif type_node == "article":
-		# On ne garde que les articles en vigueur, avec un texte non vide
 		if data.get("etat") != "VIGUEUR":
 			return
 		texte = (data.get("texte") or "").strip()
@@ -71,7 +60,6 @@ def parse_articles(node, section_path, articles_out, partie_filter):
 
 
 def extract_articles(legi_root, partie_filter="Partie législative"):
-	# Point d'entree : on appelle parse_articles depuis la racine et on recupere une liste plate.
 	articles = []
 	for child in legi_root.get("children", []):
 		parse_articles(child, [], articles, partie_filter)
@@ -79,13 +67,9 @@ def extract_articles(legi_root, partie_filter="Partie législative"):
 
 
 def build_chunks(articles):
-	# Pour chaque article on construit un texte qui contient le numero d'article,
-	# le chemin de section et le texte. C'est ce texte qui va etre embedde.
-	# Inclure le numero d'article aide la recherche quand l'utilisateur cite un article precis.
 	chunks = []
 	metadatas = []
 	for article in articles:
-		# Section courte = derniere section parente (la plus precise), section longue = chemin complet
 		section_courte = article["section_path"][-1] if article["section_path"] else ""
 		section_complete = " > ".join(article["section_path"])
 
@@ -96,8 +80,8 @@ def build_chunks(articles):
 		chunks.append(texte_chunk)
 		metadatas.append({
 			"article": article["num"],
-			"titre": section_courte,           # section parente comme titre lisible
-			"section": section_complete,       # chemin complet en metadonnee
+			"titre": section_courte,
+			"section": section_complete,
 		})
 	return chunks, metadatas
 
@@ -122,39 +106,25 @@ def retrieve(question, sentence_transformer_object, collection, n=3):
 
 
 if __name__ == "__main__":
-	# 1. Chargement du modele d'embedding
-	# paraphrase-multilingual-mpnet-base-v2 : multilingue, qualite tres superieure
-	# a distiluse pour du francais technique/juridique. Dim 768 (vs 512 pour distiluse).
 	device = get_best_device()
 	print(f"Device utilise pour l'embedding : {device}")
 	print(f"Modele d'embedding : {EMBEDDING_MODEL_NAME}")
 	sentence_transformer_object = SentenceTransformer(EMBEDDING_MODEL_NAME, device=device)
 
-	# 2. Chargement du corpus LEGI (Code du travail complet)
-	# On garde uniquement la "Partie législative" (les fameux articles L...)
-	# en etat VIGUEUR -> ~4400 articles, ce qui suffit largement pour repondre
-	# aux questions courantes sans gonfler inutilement l'index.
 	print("Chargement du JSON LEGI...")
 	legi_root = load_legi_json("corpus/LEGITEXT000006072050.json")
 	articles = extract_articles(legi_root, partie_filter="Partie législative")
 	print(f"Corpus charge : {len(articles)} articles VIGUEUR (Partie législative)")
 
-	# 3. Construction des chunks et des metadatas
 	chuncks, metadatas = build_chunks(articles)
 
-	# 4. Calcul des embeddings (un vecteur par chunk)
 	embeddings = get_embeddings(sentence_transformer_object, chuncks)
 
-	# 5. Creation/ouverture de la base vectorielle persistante.
-	# Le nom du dossier inclut le nom du modele d'embedding (cf. get_db_path),
-	# ce qui rend la base auto-documentee et evite les melanges entre modeles.
 	db_path = get_db_path()
 	print(f"Base vectorielle : {db_path}")
 	chroma = chromadb.PersistentClient(path=db_path)
 	collection = chroma.get_or_create_collection("code_du_travail")
 
-	# 6. Ajout des chunks dans la collection
-	# On utilise upsert plutot que add pour eviter une erreur si on relance le script
 	collection.upsert(
 		ids=[f"article_{meta['article']}" for meta in metadatas],
 		documents=chuncks,
@@ -164,7 +134,6 @@ if __name__ == "__main__":
 
 	print(f"Indexation terminee : {collection.count()} articles dans la base")
 
-	# 7. Petit test rapide pour verifier que la recherche fonctionne
 	print("\n--- Test de recherche ---")
 	docs, metas = retrieve(
 		"Combien de jours de conges payes ai-je droit par an ?",

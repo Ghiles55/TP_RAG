@@ -11,8 +11,7 @@ from sentence_transformers import SentenceTransformer
 load_dotenv()
 
 
-# Modele LLM Groq utilise pour la generation, lu depuis .env (variable GROQ_MODEL),
-# avec une valeur par defaut.
+
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
 
 
@@ -49,8 +48,7 @@ def answer_question(question, sentence_transformer_object, collection):
 			}
 		],
 
-		# Le modele est lu depuis .env (variable GROQ_MODEL).
-		# Defaut : openai/gpt-oss-120b (meilleur modele de reasoning free tier Groq).
+
 		model=GROQ_MODEL
 	)
 
@@ -67,9 +65,7 @@ def main():
 	print(f"Modele LLM Groq (inference) : {GROQ_MODEL}")
 	sentence_transformer_object = SentenceTransformer(EMBEDDING_MODEL_NAME, device=device)
 
-	# On recupere le meme chemin de base que celui utilise par indexation.py.
-	# Comme le nom du modele est dans le path, on est sur de ne pas requeter
-	# une base qui aurait ete generee avec un autre modele.
+
 	db_path = get_db_path()
 	print(f"Base vectorielle : {db_path}")
 	chroma = chromadb.PersistentClient(path=db_path)
